@@ -1,0 +1,4 @@
+Flask==2.3.2
+Flask_Admin==1.6.1
+flask_sqlalchemy==3.0.3
+Requests==2.31.0

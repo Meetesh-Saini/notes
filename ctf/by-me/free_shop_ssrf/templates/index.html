@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CTF Mart</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://malsup.github.io/jquery.form.js"></script>
+    <style>
+        .card img {
+            display: flex;
+            max-width: 18rem;
+            max-height: 27rem;
+            width: auto;
+            height: auto;
+            align-self: center;
+        }
+
+        .card {
+            display: grid;
+            grid-template-rows: auto 3.5rem;
+            cursor: pointer;
+            width: 18rem;
+        }
+
+        .card-body {
+            max-height: 3.5rem;
+        }
+
+        h1 {
+            margin-left: 2rem;
+        }
+
+        .inactive {
+            display: none !important;
+        }
+
+        #form {
+            position: fixed;
+            top: 4rem;
+            width: 100%;
+            height: 100%;
+            max-width: 40rem;
+            max-height: 15rem;
+            background-color: #eee;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: space-around;
+            z-index: 30;
+        }
+
+        #closeform {
+            text-decoration: none;
+        }
+
+        .container {
+            justify-content: center;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>CTF Mart</h1>
+    <div class="container d-flex flex-wrap mt-3" id="main">
+        <form method="post" action="/buy" id="form" class="inactive">
+            <input type="text" name="product_id" class="form-control" id="product_id" hidden>
+            <div class="form-group">
+                <label for="inputPro">Product</label>
+                <input type="text" name="product" id="inputPro" class="form-control" disabled>
+            </div>
+            <div class="form-group">
+                <label for="inputAddress">Coupon code</label>
+                <input type="text" name="coupon_code" class="form-control" id="inputAddress" placeholder="CTFFREE">
+            </div>
+            <button type="submit" class="btn btn-primary">Buy</button>
+            <a href="#" id="closeform" class="btn">Close</a>
+        </form>
+    </div>
+</body>
+<script>
+    $(document).ready(function () {
+        products = {
+            "T-shirt": ["1", "6Nub980bI3I"],
+            "Water bottle": ["2", "reEySFadyJQ"],
+            "Sunglasses": ["3", "K62u25Jk6vo"],
+            "Backpack": ["4", "Fg334FhzUEQ"],
+            "Headphones": ["5", "LSNJ-pltdu8"],
+            "Phone case": ["6", "fCO3tBcnkhg"],
+            "Coffee mug": ["7", "8EIyi9Fd0vQ"],
+            "Notebook": ["8", "EYGFG3thfAo"],
+            "Pen set": ["9", "1lbmrKTx8gQ"],
+            "Keychain": ["10", "110m1dtgn4c"],
+            "Wallet": ["11", "LBKDJI8Ernw"],
+            "Watch": ["12", "4R_WEmhx8og"],
+            "Umbrella": ["13", "RnLqehREQr8"],
+            "Scarf": ["14", "l2NryXUJFaY"],
+            "Gloves": ["15", "wbvspKg02Ao"],
+            "Sweater": ["16", "96oddxihsfA"],
+            "Jacket": ["17", "_BDBEP0ePQc"],
+            "Jeans": ["18", "aWLTXw6kbDw"],
+            "Shorts": ["19", "Hd4nlxLgIbA"],
+            "Shoes": ["20", "LxVxPA1LOVM"],
+        }
+
+
+        products = {
+            "T-shirt": ["1", "https://images.unsplash.com/photo-1581655353564-df123a1eb820?q=80&w=1974&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"],
+            "Water bottle": ["2", "https://images.unsplash.com/photo-1517265170777-6d1d1be7a89f?q=80&w=1974&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"],
+            "Sunglasses": ["3", "https://images.unsplash.com/photo-1511499767150-a48a237f0083?q=80&w=2080&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"],
+            "Backpack": ["4", "https://images.unsplash.com/photo-1474376962954-d8a681cc53b2?q=80&w=1974&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"],
+            "Headphones": ["5", "https://images.unsplash.com/photo-1505740420928-5e560c06d30e?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"],
+            "Phone case": ["6", "https://images.unsplash.com/photo-1542219550-76864b1bc385?q=80&w=1925&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"],
+            "Coffee mug": ["7", "https://images.unsplash.com/photo-1533776992670-a72f4c28235e?q=80&w=1965&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"],
+            "Notebook": ["8", "https://images.unsplash.com/photo-1612367980327-7454a7276aa7?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"],
+            "Pen set": ["9", "https://images.unsplash.com/photo-1605641987901-77d82814989d?q=80&w=1974&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"],
+            "Keychain": ["10", "https://images.unsplash.com/photo-1622187870684-c4aa08eddcf1?q=80&w=1974&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"],
+            "Wallet": ["11", "https://images.unsplash.com/photo-1512415073221-64c70eee25bc?q=80&w=1974&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"],
+            "Watch": ["12", "https://images.unsplash.com/photo-1524805444758-089113d48a6d?q=80&w=1976&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"],
+            "Umbrella": ["13", "https://images.unsplash.com/photo-1499678450342-29ebee16d1ab?q=80&w=1707&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"],
+            "Scarf": ["14", "https://images.unsplash.com/photo-1485527691629-8e370684924c?q=80&w=2074&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"],
+            "Gloves": ["15", "https://images.unsplash.com/photo-1644308977849-45a83bf3b067?q=80&w=1974&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"],
+            "Sweater": ["16", "https://images.unsplash.com/photo-1513408445430-94df9b382dec?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"],
+            "Jacket": ["17", "https://images.unsplash.com/photo-1591047139829-d91aecb6caea?q=80&w=1936&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"],
+            "Jeans": ["18", "https://images.unsplash.com/photo-1623120389902-6c846c80f4c8?q=80&w=2080&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"],
+            "Shorts": ["19", "https://images.unsplash.com/photo-1576259190811-d071de018494?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"],
+            "Shoes": ["20", "https://images.unsplash.com/photo-1542291026-7eec264c27ff?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"],
+        }
+
+        // <img class="card-img-top" src="https://source.unsplash.com/${val[1]}" alt="${key}">
+        $.each(products, function (key, val) {
+            let div = document.createElement("div");
+            div.classList.add("card");
+            div.setAttribute("pid", val[0]);
+            div.innerHTML = `
+                <img class="card-img-top" src="${val[1]}" alt="${key}">
+                <div class="card-body">
+                    <p class="card-text">${key}</p>
+                </div>
+            `;
+            $("#main").append(div);
+        });
+        $('#form')
+            .ajaxForm({
+                url: '/buy',
+                success: function (response) {
+                    alert("Amount to pay: " + response);
+                },
+                error: function (response) {
+                    alert("ERROR: " + response);
+                }
+            })
+            ;
+
+        $(".card").click(function () {
+            $("#form").removeClass("inactive");
+            $("#product_id").val($(this).attr("pid"));
+            $("#inputPro").val($(this).find("p").text());
+        });
+
+        $("#closeform").click(() => {
+            $("#form").addClass("inactive");
+        })
+    });
+</script>
+
+</html>

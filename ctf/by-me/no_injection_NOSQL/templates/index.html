@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin</title>
+    <style>
+        body{
+            margin: 0;
+        }
+        #form{
+            height: 20rem;
+            background-color: rgb(21, 49, 105);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            color: #fff;
+            gap: 0.5rem;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>WoW Technologies Admin Login</h1>
+    <form id="form" action="/login" method="post">
+        <label for="username">Username</label>
+        <input id="username" name="username" type="text" autocomplete="off">
+        <label for="password">Password</label>
+        <input id="password" name="password" type="password">
+        <button type="submit">Log in</button>
+    </form>
+</body>
+<script>
+    document.getElementById("form").addEventListener("submit", (e) => {
+        e.preventDefault();
+        fetch("/login", {
+            "method": "POST",
+            "body": JSON.stringify({
+                "username": document.getElementById("username").value,
+                "password": document.getElementById("password").value
+            })
+        })
+        .then((res) => {
+            if(res.ok)
+                console.log(res.text);
+        })
+    })
+</script>
+
+</html>
